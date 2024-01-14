@@ -1,6 +1,8 @@
 import Prompt from "@models/prompt";
 import { connectToDB } from "@utils/database";
 
+export const revalidate = 0; // this is the new line added
+
 export const GET = async (request, { params }) => {
     try {
         await connectToDB()
