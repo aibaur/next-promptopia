@@ -1,37 +1,41 @@
 "use client";
 
+import Form from "@components/Form";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import Form from "@components/Form";
-
-const UpdatePrompt = () => {
+const EditPrompt = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const promptId = searchParams.get("id");
+  const [submitting, setSubmitting] = useState(false);
+  const [post, setPost] = useState({
+    prompt: "",
+    tag: "",
+  });
 
-  const [post, setPost] = useState({ prompt: "", tag: "", });
-  const [submitting, setIsSubmitting] = useState(false);
+  const getPromptData = async (promptId) => {
+    const response = await fetch(`/api/prompt/${promptId}`);
+    const data = await response.json();
+    setPost({
+      prompt: data.prompt,
+      tag: data.tag,
+    });
+  };
 
   useEffect(() => {
-    const getPromptDetails = async () => {
-      const response = await fetch(`/api/prompt/${promptId}`);
-      const data = await response.json();
-
-      setPost({
-        prompt: data.prompt,
-        tag: data.tag,
-      });
-    };
-
-    if (promptId) getPromptDetails();
+    if (promptId) {
+      getPromptData(promptId);
+    }
   }, [promptId]);
 
   const updatePrompt = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+    e.preventDefault(); // this is to prevent reload of page on submitting form
+    setSubmitting(true); // to create a loading effect when submitting = true
 
-    if (!promptId) return alert("Missing PromptId!");
+    if (!promptId) {
+      return alert("Prompt ID not found");
+    }
 
     try {
       const response = await fetch(`/api/prompt/${promptId}`, {
@@ -48,19 +52,19 @@ const UpdatePrompt = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
 
   return (
     <Form
-      type='Edit'
+      type="Edit"
+      submitting={submitting}
       post={post}
       setPost={setPost}
-      submitting={submitting}
       handleSubmit={updatePrompt}
     />
   );
 };
 
-export default UpdatePrompt;
+export default EditPrompt;

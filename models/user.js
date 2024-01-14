@@ -15,7 +15,10 @@ const UserSchema = new Schema({
     type: String,
   }
 });
-
+// models object contains all the models in the whole database, 
+// now it checks if we have `User` already in the model, if yes, then return that, and if not , 
+// then initialize a new model with the schema. 
+// This saves us from creating a new model every time an api call is made and reconnection happens.
 const User = models.User || model("User", UserSchema);
 
 export default User;

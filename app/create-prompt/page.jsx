@@ -2,30 +2,29 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import Form from "@components/Form";
 import { useRouter } from "next/navigation";
 
-import Form from "@components/Form";
+const CreatePrompt = () => {
+  const router = useRouter();  
+  const [submitting, setSubmitting] = useState(false);
 
-const CreatePrompt  = () => {
-  const router = useRouter();
-  const { data: session } = useSession();
-  
-  const [submitting, setIsSubmitting] = useState(false);
   const [post, setPost] = useState({
-    prompt:'',
-    tag: '',
+    prompt: "",
+    tag: "",
   });
+  const { data: session } = useSession();
 
   const createPrompt = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+    e.preventDefault(); // this is to prevent reload of page on submitting form
+    setSubmitting(true); // to create a loading effect when submitting = true
 
     try {
       const response = await fetch("/api/prompt/new", {
         method: "POST",
         body: JSON.stringify({
           prompt: post.prompt,
-          userId: session?.user.id,
+          userId: session?.user?.id,
           tag: post.tag,
         }),
       });
@@ -36,20 +35,19 @@ const CreatePrompt  = () => {
     } catch (error) {
       console.log(error);
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
-
   };
   
   return (
     <Form
-      type='Create'
+      type="Create"
+      submitting={submitting}
       post={post}
       setPost={setPost}
-      submitting={submitting}
-      handleSubmit={createPrompt}    
+      handleSubmit={createPrompt}
     />
   );
 };
 
-export default CreatePrompt; 
+export default CreatePrompt;

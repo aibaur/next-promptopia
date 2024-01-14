@@ -1,14 +1,15 @@
 import Prompt from "@models/prompt";
 import { connectToDB } from "@utils/database";
 
-export const GET = async (request, { params }) => {
+export const GET = async (req, { params }) => {
     try {
-        await connectToDB()
+        await connectToDB();
+		const { id } = params;
+        const prompts = await Prompt.find({ creator: id }).populate("creator");
 
-        const prompts = await Prompt.find({ creator: params.id }).populate("creator")
-
-        return new Response(JSON.stringify(prompts), { status: 200 })
+        return new Response(JSON.stringify(prompts), { status: 201 });
     } catch (error) {
-        return new Response("Failed to fetch prompts created by user", { status: 500 })
+        console.log(error);
+        return new Response({ error: "Failed to fetch all prompts" }, { status: 500 });
     }
-} 
+};

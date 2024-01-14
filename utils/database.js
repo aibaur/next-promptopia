@@ -1,4 +1,3 @@
-import { MongoGridFSChunkError } from "mongodb";
 import mongoose from "mongoose";
 
 let isConnected = false;    // track the connection status
@@ -14,14 +13,14 @@ export const connectToDB = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI, {
             dbName: "next_prompt",
-            //useNewUrlParser: true,
-            //useUnifiedTopology: true,
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
         })
         
         isConnected = true;
-
         console.log('MongoDB connected')
       } catch (error) {
-        console.log(error);
+        isConnected = false;
+        console.log(err);
       }
 }
