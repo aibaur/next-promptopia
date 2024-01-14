@@ -50,7 +50,7 @@ Consider you are a professional web developer. I will give a snippet of code to 
 
 > git add .
 
-> git commit -m 'fixed typo'
+> git commit -m 'fixed mongodb'
 
 > git push
 
@@ -59,6 +59,3 @@ Consider you are a professional web developer. I will give a snippet of code to 
 
 https://next-promptopia-rho.vercel.app/
 
-https://next-promptopia-q2l4rw06e-ali-bakdurs-projects.vercel.app/
-
-https://next-promptopia-q2l4rw06e-ali-bakdurs-projects.vercel.app/
